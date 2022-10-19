@@ -1,0 +1,14 @@
+.statistic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.statistic-container div {
+    font-size: 20px;
+}
+
+.statistic-title{
+    font-size: 100px;
+}
