@@ -4,7 +4,7 @@ import { ref, onValue} from 'firebase/database'
 import { Chart } from "react-google-charts";
 
 export const options = {
-    title: "Eficiência com rastreador solar",
+    title: "Eficiência sem rastreador solar",
     hAxis: { title: "Eficiência", titleTextStyle: { color: "#333" } },
     vAxis: { minValue: 0 },
     chartArea: { width: "50%", height: "70%" },
