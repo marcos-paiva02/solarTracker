@@ -12,3 +12,24 @@
 .statistic-title{
     font-size: 100px;
 }
+
+.statistic-data{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    gap: 20px;
+}
+
+.data-container{
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    background-color: rgb(163, 156, 145);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.data-container div {
+    font-size: 20px;
+}

@@ -47,7 +47,6 @@ header img {
 }
 
 header strong {
-    font-family: 'Lobster', cursive;
     font-size: 3rem;
 }
 
@@ -61,7 +60,7 @@ header strong {
 }
 
 .status-off {
-    background-color: red;
+    background-color: rgba(237, 72, 72, 0.838);
     display: flex;
     gap: 25px;
     align-items: center;
@@ -70,7 +69,7 @@ header strong {
 }
 
 .status-on {
-    background-color: green;
+    background-color: rgba(50, 183, 50, 0.804);
     display: flex;
     gap: 25px;
     align-items: center;

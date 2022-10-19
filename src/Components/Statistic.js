@@ -47,12 +47,21 @@ export default function Statistic() {
 
     return (
         <div className='statistic-container'>
-            <div className='statistic-title'>Medições com rastreamento:</div>
+            <div style={{fontSize: '20px'}} className='statistic-title'>Medições médias com rastreamento:</div>
             <div> <hr/> </div>
             <div className='statistic-data'>
-                <div>V média: { vef.toFixed(1) } V</div>
-                <div>I média: { ief.toFixed(1) }A </div>
-                <div>P média: { (vef*ief).toFixed(1) }W </div>
+                <div className='data-container'>
+                    <div>Tensão:</div>
+                    <div>{ vef.toFixed(1) }V</div>
+                </div>
+                <div className='data-container'>
+                    <div>Corrente:</div>
+                    <div>{ ief.toFixed(1) }A</div>
+                </div>
+                <div className='data-container'>
+                    <div>Potência:</div>
+                    <div>{ (vef*ief).toFixed(1) }W</div>
+                </div>
             </div>           
         </div>
     )
