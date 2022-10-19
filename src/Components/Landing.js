@@ -33,7 +33,7 @@ export default () => {
         <div className="page-landing" id="page-landing">
             <header className="landing animate-up">
                 <aside>
-                    <a href="https://www.instagram.com/dudink.tattoo/" target="_blank">
+                    <a href="https://github.com/marcos-paiva02/ProjetoSolarTracker/" target="_blank">
                         <img src={insta} alt=""/>
                     </a>
                 </aside>
