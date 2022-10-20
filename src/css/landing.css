@@ -77,9 +77,17 @@ header strong {
     border-radius: 2rem;
 }
 
-.bateria {
+.bateria-off {
     display: flex;
     background-color: rgb(184, 182, 16);
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+}
+
+.bateria-on {
+    display: flex;
+    background-color: rgba(50, 183, 50, 0.804);
     align-items: center;
     justify-content: center;
     border-radius: 2rem;
@@ -102,11 +110,22 @@ header strong {
     align-items: center ;
 }
 
-.cart {
+.cart-off {
     display: flex;
     width: 95%;
     height: 50px;
-    background-color: blue;
+    background-color: rgba(166, 166, 166, 0.511);
+    border-radius: 2rem;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center
+}
+
+.cart-on {
+    display: flex;
+    width: 95%;
+    height: 50px;
+    background-color: rgba(50, 183, 50, 0.804);
     border-radius: 2rem;
     margin-top: 10px;
     align-items: center;
@@ -116,7 +135,6 @@ header strong {
 .components-label {
     height: 35rem;
     width: 100%;
-    align-items: center;
     justify-content: center;
     display: grid;
     grid-template-columns: 45% 45%;

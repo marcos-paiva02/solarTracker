@@ -33,7 +33,7 @@ export default () => {
         <div className="page-landing" id="page-landing">
             <header className="landing animate-up">
                 <aside>
-                    <a href="https://github.com/marcos-paiva02/ProjetoSolarTracker/" target="_blank">
+                    <a href="https://github.com/marcos-paiva02/solarTracker" target="_blank">
                         <img src={insta} alt=""/>
                     </a>
                 </aside>
@@ -53,17 +53,16 @@ export default () => {
                                 }
                             }}>ON / OFF</button>
                         </div>
-                        <div className='bateria'> NÍVEL DA BATERIA: { (status.bateria) }% </div>
+                        <div className= {`bateria-off ${status.bateria > 80 ? 'bateria-on' : '' }`}> NÍVEL DA BATERIA: { (status.bateria) }% </div>
                     </div>
                     <div className='datas-container'>
                         <div className='tasks-container'>
-                            <div className='cart'> Banho de 20 minutos </div>
-                            <div className='cart'> Passar roupa por 1 hora </div>
-                            <div className='cart'> Aquecer Piscina </div>
-                            <div className='cart'></div>
-                            <div className='cart'></div>
-                            <div className='cart'></div>
-                            <div className='cart'></div>
+                            <div style={{fontSize: '20px', fontStyle: 'bold'}}>O QUE POSSO FAZER COM { status.bateria }% DE BATERIA: </div>
+                            <div className= {`cart-off ${status.bateria > 30 ? 'cart-on' : '' }`}> Acender luzes externas</div>
+                            <div className= {`cart-off ${status.bateria > 40 ? 'cart-on' : '' }`}> Passar roupa por 1 hora </div>
+                            <div className= {`cart-off ${status.bateria > 70 ? 'cart-on' : '' }`}> Usar torneira aquecida por 1 hora</div>
+                            <div className= {`cart-off ${status.bateria > 80 ? 'cart-on' : '' }`}> Aquecer Piscina </div>
+                            <div className= {`cart-off ${status.bateria > 90 ? 'cart-on' : '' }`}> Tomar banho de 30 minutos </div>
                         </div>
                         <div className="components-label">
                             <div><Statistic /></div>
