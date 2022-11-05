@@ -11,9 +11,6 @@ let ief = 0
 
 export default function Statistic() {     
 
-    const [voltageList, setVoltageList] = useState([])
-    const [currentList, setCurrentList] = useState([])
-
     const voltageRef = ref(firebase, ('voltage2'))
     const currentRef = ref(firebase, ('current2'))
     
@@ -24,11 +21,11 @@ export default function Statistic() {
             for (let id in voltages) {
                 voltageList.push(voltages[id])
             }
-            setVoltageList(voltageList)
             for (let i = 0; i < voltageList.length; i++) {
                 totalVoltage = totalVoltage + parseInt(voltageList[i])
-                vef = totalVoltage / voltageList.length
             }
+            vef = totalVoltage / voltageList.length
+            totalVoltage = 0
         })
 
         onValue(currentRef, (snapshot) => {
@@ -37,11 +34,11 @@ export default function Statistic() {
             for (let id in currents) {
                 currentList.push(currents[id])
             }
-            setCurrentList(currentList)
             for (let i = 0; i < currentList.length; i++) {
                 totalCurrent = totalCurrent + parseInt(currentList[i])
-                ief = totalCurrent / currentList.length
             }
+            ief = totalCurrent / currentList.length
+            totalCurrent = 0
         })
     }, [])
 
@@ -52,15 +49,15 @@ export default function Statistic() {
             <div className='statistic-data'>
                 <div className='data-container'>
                     <div>Tensão:</div>
-                    <div>{ vef.toFixed(1) }V</div>
+                    <div>{ vef.toFixed(2) }V</div>
                 </div>
                 <div className='data-container'>
                     <div>Corrente:</div>
-                    <div>{ ief.toFixed(1) }A</div>
+                    <div>{ ief.toFixed(2) }A</div>
                 </div>
                 <div className='data-container'>
                     <div>Potência:</div>
-                    <div>{ (vef*ief).toFixed(1) }W</div>
+                    <div>{ (vef*ief).toFixed(2) }W</div>
                 </div>
             </div>               
         </div>
