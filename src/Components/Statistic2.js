@@ -22,7 +22,7 @@ export default function Statistic() {
                 voltageList.push(voltages[id])
             }
             for (let i = 0; i < voltageList.length; i++) {
-                totalVoltage = totalVoltage + parseInt(voltageList[i])
+                totalVoltage = totalVoltage + parseFloat(voltageList[i])
             }
             vef = totalVoltage / voltageList.length
             totalVoltage = 0
@@ -35,7 +35,7 @@ export default function Statistic() {
                 currentList.push(currents[id])
             }
             for (let i = 0; i < currentList.length; i++) {
-                totalCurrent = totalCurrent + parseInt(currentList[i])
+                totalCurrent = totalCurrent + parseFloat(currentList[i])
             }
             ief = totalCurrent / currentList.length
             totalCurrent = 0
