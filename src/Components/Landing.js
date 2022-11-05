@@ -10,6 +10,7 @@ import '../css/landing.css'
 
 import logo from '../img/logo.svg'
 import insta from  '../img/insta.png'
+import unip from  '../img/unip.png'
   
 export default () => {
     
@@ -41,6 +42,7 @@ export default () => {
                     <div className="logo-titulo">
                         <img className="logo" src={logo} alt="logo"/>
                         <strong className="titulo">RASTREADOR SOLAR SMART</strong>
+                        <img className="unip" src={unip} alt="unip"/>
                     </div>
                     <div className='status-container'>
                         <div className= {`status-off ${status.status === 'LIGADO' ? 'status-on' : '' }`}> 
