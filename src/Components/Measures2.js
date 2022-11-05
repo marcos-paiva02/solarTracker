@@ -29,7 +29,7 @@ export default function CurrentList() {
             }
             setVoltageList(voltageList)
             for (let i = 0; i < voltageList.length; i++) {
-                data[i + 1] = [i + 1, parseInt(voltageList[i]), 0]
+                data[i + 1] = [i + 1, parseFloat(voltageList[i]), 0]
             }
         })
 
@@ -41,7 +41,7 @@ export default function CurrentList() {
             }
             setCurrentList(currentList)
             for (let i = 0; i < currentList.length; i++) {
-                data[i + 1][2] = parseInt(currentList[i])
+                data[i + 1][2] = parseFloat(currentList[i])
             }
         })
         data[0] = ['dia', 'tensão', 'corrente']
