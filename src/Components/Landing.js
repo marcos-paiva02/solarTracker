@@ -45,13 +45,13 @@ export default () => {
                         <img className="unip" src={unip} alt="unip"/>
                     </div>
                     <div className='status-container'>
-                        <div className= {`status-off ${status.status === 'LIGADO' ? 'status-on' : '' }`}> 
+                        <div className= {`status-off ${status.status === '1' ? 'status-on' : '' }`}> 
                             STATUS RASTREADOR: { (status.status) }
                             <button className='status-button' onClick={() => {
-                                if (status.status === 'LIGADO') {
-                                    updateStatus('DESLIGADO')
+                                if (status.status === '1') {
+                                    updateStatus('0')
                                 } else {
-                                    updateStatus('LIGADO')
+                                    updateStatus('1')
                                 }
                             }}>ON / OFF</button>
                         </div>
