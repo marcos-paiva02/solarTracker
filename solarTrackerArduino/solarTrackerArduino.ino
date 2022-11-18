@@ -1,31 +1,61 @@
-#define voltageSensor A0
-#define currentSensor A1
-#define sensorSupEsq A2
-#define sensorSupDir A3
-#define sensorInfEsq A4
-#define sensorInfDir A5
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+//                                                  SOLAR TRACKER ARDUINO
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
+// DESCRIÇÃO DO FUNCIONAMENO: Esse programa tem como objetivo o acionamento dos drivers dos motores, medições de corrente e tensão
+// do sistema foto-voltaico e leitura dos LDR'S para o funcionamento do rastreador solar.
+//
+// PROGRAMADOR: Marcos da Silva Paiva
+// DATA CRIAÇÃO: 13/09/2022
+// DATA ÚLTIMA REVISÃO: 01/11/2022
+// VERSÃO: 1.0
+//*******************************************************************************************************************************
+//*******************************************************************************************************************************
 
-unsigned long measureTime = millis();
+/////////////////////////////////////////////////////////////////////
+/*
+* DECLARAÇÃO DE VARIÁVEIS 
+*/
+////////////////////////////////////////////////////////////////////
 
-int dirVer   = 3;
-int stepVer  = 4;
-int dirHor   = 5;
-int stepHor  = 6;
+// DEFINIÇÃO DAS PORTAS ANALÓGICAS
 
-int posVer = 0;
-int posHor = 0;
-int comparaSensoresLaterais = 85;
-int comparaSensoresExtremos = 15;
-float voltageMeasure = 0;
-float currentMeasure = 0;
+#define voltageSensor A0 //LEITURA DA TENSÃO
+#define currentSensor A1 //LEITURA DA CORRENTE
+#define sensorSupEsq A2 //LEITURA DO LDR DO CANTO SUPERIOR ESQUERDO
+#define sensorSupDir A3 //LEITURA DO LDR DO CANTO SUPERIOR DIREITO
+#define sensorInfEsq A4 //LEITURA DO LDR DO CANTO INFERIOR ESQUERDO
+#define sensorInfDir A5 //LEITURA DO LDR DO CANTO INFERIO DIREITO
+
+unsigned long measureTime = millis(); //CLOCK INTERNO DO ARDUINO
+
+int dirVer   = 3; //SAÍDA PARA ACIONAMENTO DA DIREÇÃO DO MOTOR DO MOVIMENTO DE TRANSLAÇÃO
+int stepVer  = 4; //SAÍDA DE PWM PARA QUANTIDADE DE PASSOS PARA O MOTOR DE MOVIMENTO DE TRANSLAÇÃO
+int dirHor   = 5; //SAÍDA PARA ACIONAMENTO DA DIREÇÃO DO MOTOR DO MOVIMENTO DE ROTAÇÃO
+int stepHor  = 6; //SAÍDA DE PWM PARA QUANTIDADE DE PASSOS PARA O MOTOR DE MOVIMENTO DE ROTAÇÃO
+
+int posVer = 0; //VARIÁVEL QUE RECEBE RESULTADO DA FUNÇÃO COMPARATIVA VERTICAL
+int posHor = 0; //VARIÁVEL QUE RECEBE RESULTADO DA FUNÇÃO COMPARATIVA HORIZONTAL
+int comparaSensoresLaterais = 85; //COEFICIENTE DE SENSIBILIDADE PARA MOVIMENTO DO MOTOR DA ROTAÇÃO
+int comparaSensoresExtremos = 15; //COEFICIENTE DE SENSIBILIDADE PARA MOVIMENTO DO MOTOR DA TRANSLAÇÃO
+float voltageMeasure = 0; //VARIÁVEL QUE RECEBE A FUNÇÃO PARA CÁLCULO DA TENSÃO
+float currentMeasure = 0; //VARIÁVEL QUE RECEBE A FUNÇÃO PARA CÁLCULO DA CORRENTE
 float voltRef = 0;
 
-String inputString = "";         // a String to hold incoming data
-bool stringComplete = false;  // whether the string is complete
-bool invertRead = false;
+String inputString = ""; //RECEBE OS DADOS ENVIADO PELA PORTA SERIAL
+bool stringComplete = false; //BOLLEANA QUE FUNCIONA COMO BIT STOP PARA RECEBIMENTOS DOS DADOS
+bool invertRead = false; //BOOLEANA QUE VARIA O ENVIO DOS DAODS PARA O ESP ENTRE CORRENTE E TENSÃO
+
+/////////////////////////////////////////////////////////////////////
+/*
+* CONFIGURAÇÕES DO ARDUINO
+*/
+////////////////////////////////////////////////////////////////////
 
 void setup() {
 
+//DECLARAÇÃO DAS ENTRADAS E SAÍDAS
   pinMode(dirVer , OUTPUT);
   pinMode(stepVer, OUTPUT);
   pinMode(dirHor , OUTPUT);
@@ -34,12 +64,20 @@ void setup() {
   digitalWrite(dirVer, LOW);
   digitalWrite(dirHor, LOW);
   
-  Serial.begin(9600);
+  Serial.begin(9600); //ATIVA PORTA SERIAL COM BAUD RATE DE 9600
 
   inputString.reserve(200);
 }
 
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO INFINITA 
+*/
+////////////////////////////////////////////////////////////////////
+
 void loop() {
+  
+//VERIFICA DADOS RECEBIDOS PELA SERIAL E VERIFICA O QUE FAZER
  /* if (stringComplete) {
     inputString.trim();
     if (inputString == "S1") {
@@ -58,6 +96,7 @@ void loop() {
     stringComplete = false;
   }*/
   solarTrackerON();
+//FUNÇÃO TEMPORIZADA QUE ENVIA PARA O ESP32 O VALOR MEDIDO NOS SENSORES DE TENSÃO E CORRENTE
   if (millis() - measureTime > 600000) {
     if (invertRead) {
       Serial.println("V" + String(voltageMeasureFUN()));
@@ -71,27 +110,30 @@ void loop() {
   delay(100);
 }
 
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO PARA MOVIMENTO AUTOMÁTICO DO RASTREADOR 
+*/
+////////////////////////////////////////////////////////////////////
+
 void solarTrackerON()
 {
   if (!noite()) {
     
-    posVer = comparaVertical();
-    posHor = comparaHorizontal();
-/////////////////////////////////////////////////////////////////////
-/*
-* MOVIMENTO TRANSLAÇÃO 
-*/
-////////////////////////////////////////////////////////////////////
+    posVer = comparaVertical(); //RECEBE O RETORNO DA FUNÇÃO VERTICAL
+    posHor = comparaHorizontal(); //RECEBE O RETORNO DA FUNÇÃO HORIZONTAL
+
+//MOVIMENTO DE TRANSLAÇÃO
   
     if (posVer < 2) {
       //Define sentido de Rotação
       if (posVer == 1 ) {
-        digitalWrite(dirVer, HIGH);
+        digitalWrite(dirVer, HIGH); //VAI PRA CIMA
       } else {
-        digitalWrite(dirVer, LOW);
+        digitalWrite(dirVer, LOW); //VAI PRA BAIXO
       }
 
-      for(int i = 0; i < 2; i++)
+      for(int i = 0; i < 2; i++) //2 PASSOS PROGRAMADOS
       {
         digitalWrite(stepVer, HIGH);
         delay(10);
@@ -100,21 +142,17 @@ void solarTrackerON()
       }
     }
 
-/////////////////////////////////////////////////////////////////////
-/*
-* MOVIMENTO ROTAÇÃO 
-*/
-////////////////////////////////////////////////////////////////////
+//MOVIMENTO DE ROTAÇÃO
     
     if (posHor < 2) {
       //Define sentido de Rotação
       if (posHor == 1 ) {
-        digitalWrite(dirHor, HIGH);
+        digitalWrite(dirHor, HIGH); //VAI PRA DIREITA
       } else {
-        digitalWrite(dirHor, LOW);
+        digitalWrite(dirHor, LOW); //VAI PRA ESQUERDA
       }
 
-      for(int i = 0; i < 5; i++)
+      for(int i = 0; i < 5; i++) //5 PASSOS PROGRAMADOS
       { 
         digitalWrite(stepHor, HIGH);
         delay(10);
@@ -125,6 +163,12 @@ void solarTrackerON()
   }
   delay(10);
 }
+
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO QUE COMPARA OS LDRS DA DIREITA E ESQUERDA 
+*/
+////////////////////////////////////////////////////////////////////
 
 int comparaHorizontal() {
   int valorEsq = analogRead(sensorSupEsq) + analogRead(sensorInfEsq);
@@ -137,6 +181,12 @@ int comparaHorizontal() {
   } else return 2;
 }
 
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO QUE COMPARA OS LDRS DE CIMA E BAIXO 
+*/
+////////////////////////////////////////////////////////////////////
+
 int comparaVertical() {
   int valorSup = analogRead(sensorSupEsq) + analogRead(sensorSupDir);
   int valorInf = analogRead(sensorInfEsq) + analogRead(sensorInfDir);
@@ -148,6 +198,12 @@ int comparaVertical() {
   } else return 2;
 }
 
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO PQUE VERIFICA SE ESTÁ DE NOITE
+*/
+////////////////////////////////////////////////////////////////////
+
 bool noite() {
   return ((analogRead(sensorSupEsq) > 1000) &&
           (analogRead(sensorSupDir) > 1000) &&
@@ -155,11 +211,23 @@ bool noite() {
           (analogRead(sensorInfEsq) > 1000));
 }
 
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO PARA CÁLCULO DA TENSÃO
+*/
+////////////////////////////////////////////////////////////////////
+
 float voltageMeasureFUN(){
   voltageMeasure = (analogRead(voltageSensor)*0.00489)*5;
 
   return voltageMeasure;
 }
+
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO PARA CÁLCULO DA CORRENTE
+*/
+////////////////////////////////////////////////////////////////////
 
 float currentMeasureFUN() {
   float rawValue = 0;
@@ -175,6 +243,12 @@ float currentMeasureFUN() {
   return currentMeasure;
 }
 
+/////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO QUE RECEBE OS DADOS DA PORTA SERIAL DO ESP32
+*/
+////////////////////////////////////////////////////////////////////
+
 void serialEvent() {
   while (Serial.available()) {
     // get the new byte:
@@ -186,6 +260,12 @@ void serialEvent() {
     }
   }
 }
+
+////////////////////////////////////////////////////////////////////////
+/*
+* FUNÇÃO QUE FAZ A MOVIMENTAÇÃO DOS MOTORES MANUALMENTE ATRAVÉS DO APP
+*/
+////////////////////////////////////////////////////////////////////////
 
 void manualMotion(int motor, int dir) {
   if (motor == 1) {
