@@ -2,8 +2,6 @@
 
 # dependencies
 /node_modules
-/solarTrackerArduino
-/solarTrackerESP32
 /.pnp
 .pnp.js
 
