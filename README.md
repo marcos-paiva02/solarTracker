@@ -1,10 +1,10 @@
 <h1 align="center"> Rastreador Solar Smart </h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este Projeto foi criado para o TCC do ano 2022 na disciplina de Engenharia Elétrica da universidade UNIP.
 
-## Available Scripts
+## Funcionamento
 
-In the project directory, you can run:
+  O sistema responsável por fazer todo o gerenciamento dos dados é o Firebase, que é uma plataforma apoiada pela Google, própria para desenvolvimento de aplicações, ou seja, todo o Backend, tal como autenticação e gerenciamento de rotas e comunicação com o Server, é criado automaticamente pela plataforma, criando um ambiente seguro para os dados e muito versátil. Foi utilizado o módulo Real-time Database, em que é possível a criação de objetos em JSON para base de dados.
 
 ### `npm start`
 
