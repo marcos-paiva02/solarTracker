@@ -44,6 +44,7 @@ float currentMeasure = 0; //VARIÁVEL QUE RECEBE A FUNÇÃO PARA CÁLCULO DA COR
 float voltRef = 0;
 
 String inputString = ""; //RECEBE OS DADOS ENVIADO PELA PORTA SERIAL
+String lastStatus = ""; //ARMAZENA O STATUS DO RASTREADOR
 bool stringComplete = false; //BOLLEANA QUE FUNCIONA COMO BIT STOP PARA RECEBIMENTOS DOS DADOS
 bool invertRead = false; //BOOLEANA QUE VARIA O ENVIO DOS DAODS PARA O ESP ENTRE CORRENTE E TENSÃO
 
@@ -78,26 +79,25 @@ void setup() {
 void loop() {
   
 //VERIFICA DADOS RECEBIDOS PELA SERIAL E VERIFICA O QUE FAZER
- /* if (stringComplete) {
-    inputString.trim();
-    if (inputString == "S1") {
-      solarTrackerON();
-    } else if (inputString == "U1") {
+  if (lastStatus == "S1") {
+    solarTrackerON();
+  }
+  if (stringComplete) {
+    if (inputString == "U") {
       manualMotion(1, 1);
-    } else if (inputString == "D1") {
+    } else if (inputString == "D") {
       manualMotion(1, 0);
-    } else if (inputString == "R1") {
+    } else if (inputString == "R") {
       manualMotion(0, 1);
-    } else if (inputString == "L1") {
+    } else if (inputString == "L") {
       manualMotion(0, 0);
     }
     // clear the string:
     inputString = "";
     stringComplete = false;
-  }*/
-  solarTrackerON();
+  }
 //FUNÇÃO TEMPORIZADA QUE ENVIA PARA O ESP32 O VALOR MEDIDO NOS SENSORES DE TENSÃO E CORRENTE
-  if (millis() - measureTime > 600000) {
+  if (millis() - measureTime > 10000) {
     if (invertRead) {
       Serial.println("V" + String(voltageMeasureFUN()));
       invertRead = !invertRead;
@@ -219,7 +219,7 @@ bool noite() {
 
 float voltageMeasureFUN(){
   voltageMeasure = (analogRead(voltageSensor)*0.00489)*5;
-
+  
   return voltageMeasure;
 }
 
@@ -239,7 +239,7 @@ float currentMeasureFUN() {
   voltRef = (5.0 / 1023.0)*rawValue;
   voltRef = voltRef - 2.5 + 0.007;
   currentMeasure = voltRef / 0.100; //5000 é a Vin*1000, 2500 é o offSet de ajuste e 66 é a resolução do sensor 66mV/A
-
+  
   return currentMeasure;
 }
 
@@ -258,6 +258,10 @@ void serialEvent() {
     if (inChar == '\n') {
       stringComplete = true;
     }
+    inputString.trim();
+    if (inputString == "S0" || inputString == "S1") {
+      lastStatus = inputString;
+    }
   }
 }
 
@@ -274,14 +278,13 @@ void manualMotion(int motor, int dir) {
     } else {
       digitalWrite(dirVer, LOW);
     }
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 2; i++)
     {
       digitalWrite(stepVer, HIGH);
       delay(10);
       digitalWrite(stepVer, LOW);
       delay(10);
     }
-    Serial.println("UD0");
   }  else {
     if (dir == 1 ) {
       digitalWrite(dirHor, HIGH);
@@ -296,6 +299,5 @@ void manualMotion(int motor, int dir) {
       digitalWrite(stepHor, LOW);
       delay(10);
     }
-    Serial.println("RL0");
   }
 }
